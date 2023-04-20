@@ -39,4 +39,4 @@ jobs:
         with:
           name: transmute Linux Library
           path: |
-            src/libtransmute.a
+            src/lib/libtransmute.a
