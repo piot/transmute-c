@@ -19,7 +19,7 @@ if (isDebug)
 endif()
 
 
-set(DEPS ../../deps/)
+set(deps ../../deps/)
 
 file(GLOB lib_src FOLLOW_SYMLINKS
         "*.c"
@@ -35,3 +35,5 @@ target_compile_options(transmute PRIVATE -Wmost -Weverything -Werror=missing-var
 endif()
 
 target_include_directories(transmute PUBLIC ../include)
+target_include_directories(transmute PUBLIC ${deps}piot/clog/src/include)
+target_include_directories(transmute PUBLIC ${deps}piot/tiny-libc/src/include)

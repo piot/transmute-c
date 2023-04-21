@@ -11,9 +11,9 @@ typedef struct AppSpecificState {
     int time;
 } AppSpecificState;
 
-typedef struct AppSpecificInput {
+typedef struct AppSpecificParticipantInput {
     int horizontalAxis;
-} AppSpecificInput;
+} AppSpecificParticipantInput;
 
 typedef struct AppSpecificVm {
     AppSpecificState appSpecificState;
@@ -24,7 +24,8 @@ void appSpecificTick(void* _self, const TransmuteInput* input)
     AppSpecificVm* self = (AppSpecificVm*) _self;
 
     if (input->participantCount > 0) {
-        const AppSpecificInput* appSpecificInput = (AppSpecificInput*) input->participantInputs[0].input;
+        const AppSpecificParticipantInput* appSpecificInput = (AppSpecificParticipantInput*) input->participantInputs[0]
+                                                                  .input;
         if (appSpecificInput->horizontalAxis > 0) {
             self->appSpecificState.x++;
             CLOG_DEBUG("app: tick with input %d, walking to the right", appSpecificInput->horizontalAxis)
@@ -57,6 +58,22 @@ void appSpecificSetState(void* _self, const TransmuteState* state)
     self->appSpecificState = *((const AppSpecificState*) state->state);
 }
 
+int appSpecificStateToString(void* _self, const TransmuteState* state, char* target, size_t maxTargetOctetSize)
+{
+    (void) _self;
+
+    const AppSpecificState* appState = (AppSpecificState*) state->state;
+    return tc_snprintf(target, maxTargetOctetSize, "state: time: %d pos.x: %d", appState->time, appState->x);
+}
+
+int appSpecificInputToString(void* _self, const TransmuteParticipantInput* input, char* target,
+                             size_t maxTargetOctetSize)
+{
+    (void) _self;
+    const AppSpecificParticipantInput* participantInput = (AppSpecificParticipantInput*) input->input;
+    return tc_snprintf(target, maxTargetOctetSize, "input: horizontalAxis: %d", participantInput->horizontalAxis);
+}
+
 UTEST(Transmute, tick)
 {
     TransmuteVm transmuteVm;
@@ -66,9 +83,14 @@ UTEST(Transmute, tick)
     setup.getStateFn = appSpecificGetState;
     setup.setStateFn = appSpecificSetState;
     setup.tickFn = appSpecificTick;
+    setup.stateToString = appSpecificStateToString;
+    setup.inputToString = appSpecificInputToString;
     setup.tickDurationMs = 16;
 
-    transmuteVmInit(&transmuteVm, &appVm, setup);
+    Clog subLog;
+    subLog.config = &g_clog;
+    subLog.constantPrefix = "AuthoritativeVm";
+    transmuteVmInit(&transmuteVm, &appVm, setup, subLog);
 
     AppSpecificState initialAppState;
     initialAppState.time = 0;
@@ -83,7 +105,7 @@ UTEST(Transmute, tick)
     ASSERT_EQ(0, appVm.appSpecificState.x);
     ASSERT_EQ(0, appVm.appSpecificState.time);
 
-    AppSpecificInput appSpecificInput;
+    AppSpecificParticipantInput appSpecificInput;
     appSpecificInput.horizontalAxis = 24;
 
     TransmuteInput transmuteInput;
