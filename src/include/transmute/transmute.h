@@ -13,23 +13,38 @@ typedef struct TransmuteState {
     size_t octetSize;
 } TransmuteState;
 
-typedef struct TransmutePartipiantInput {
+typedef struct TransmuteParticipantInput {
     const void* input;
     size_t octetSize;
-} TransmutePartipiantInput;
+} TransmuteParticipantInput;
 
 typedef struct TransmuteInput {
-    TransmutePartipiantInput* participantInputs;
+    TransmuteParticipantInput* participantInputs;
     size_t participantCount;
 } TransmuteInput;
 
-typedef TransmuteState (*TransmuteTickFn)(const TransmuteState* state, const TransmuteInput* input);
+typedef void (*TransmuteTickFn)(void* vmPointer, const TransmuteInput* input);
+typedef TransmuteState (*TransmuteGetStateFn)(const void* vmPointer);
+typedef void (*TransmuteSetStateFn)(void* vmPointer, const TransmuteState* state);
 
-typedef struct Transmute {
+typedef struct TransmuteVm {
     TransmuteTickFn tickFn;
+    TransmuteGetStateFn getStateFn;
+    TransmuteSetStateFn setStateFn;
     size_t constantTickDurationMs;
-} Transmute;
+    void* vmPointer;
+} TransmuteVm;
 
-void transmuteInit(Transmute* self, TransmuteTickFn tickFn, size_t tickDurationMs);
+typedef struct TransmuteVmSetup {
+    TransmuteTickFn tickFn;
+    TransmuteGetStateFn getStateFn;
+    TransmuteSetStateFn setStateFn;
+    size_t tickDurationMs;
+} TransmuteVmSetup;
+
+void transmuteVmInit(TransmuteVm* self, void* vmPointer, TransmuteVmSetup setup);
+void transmuteVmSetState(TransmuteVm* self, const TransmuteState* state);
+void transmuteVmTick(TransmuteVm* self, const TransmuteInput* input);
+TransmuteState transmuteVmGetState(const TransmuteVm* self);
 
 #endif
