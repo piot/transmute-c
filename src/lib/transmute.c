@@ -19,6 +19,7 @@ void transmuteVmInit(TransmuteVm* self, void* vmPointer, TransmuteVmSetup setup,
     self->constantTickDurationMs = setup.tickDurationMs;
     self->vmPointer = vmPointer;
     self->log = log;
+    self->initialStateIsSet = false;
 }
 
 /// Sets a state to the virtual machine
@@ -28,6 +29,7 @@ void transmuteVmInit(TransmuteVm* self, void* vmPointer, TransmuteVmSetup setup,
 void transmuteVmSetState(TransmuteVm* self, const TransmuteState* state)
 {
     self->setStateFn(self->vmPointer, state);
+    self->initialStateIsSet = true;
 }
 
 /// Ticks the virtual machine. The virtual machine keeps the mutated state in an efficient way
@@ -36,6 +38,9 @@ void transmuteVmSetState(TransmuteVm* self, const TransmuteState* state)
 /// @param input
 void transmuteVmTick(TransmuteVm* self, const TransmuteInput* input)
 {
+    if (!self->initialStateIsSet) {
+        CLOG_ERROR("can not tick, since initial state has not been set")
+    }
 #if CONFIGURATION_DEBUG
     char inputDebugString[64];
     self->inputToString(self->vmPointer, &input->participantInputs[0], inputDebugString, 64);
@@ -50,6 +55,9 @@ void transmuteVmTick(TransmuteVm* self, const TransmuteInput* input)
 /// @return
 TransmuteState transmuteVmGetState(const TransmuteVm* self)
 {
+    if (!self->initialStateIsSet) {
+        CLOG_ERROR("can not read state, no state has been set")
+    }
     return self->getStateFn(self->vmPointer);
 }
 

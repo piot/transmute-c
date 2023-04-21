@@ -41,6 +41,7 @@ typedef struct TransmuteVm {
     size_t constantTickDurationMs;
     void* vmPointer;
     Clog log;
+    bool initialStateIsSet;
 } TransmuteVm;
 
 typedef struct TransmuteVmSetup {
