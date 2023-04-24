@@ -62,5 +62,6 @@ int transmuteVmStateToString(const TransmuteVm* self, const TransmuteState* stat
                              size_t maxTargetOctetSize);
 int transmuteVmInputToString(const TransmuteVm* self, const TransmuteParticipantInput* input, char* target,
                              size_t maxTargetOctetSize);
+bool transmuteVmHasState(const TransmuteVm* self);
 
 #endif

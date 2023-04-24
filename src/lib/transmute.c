@@ -82,3 +82,11 @@ int transmuteVmInputToString(const TransmuteVm* self, const TransmuteParticipant
 {
     return self->inputToString(self->vmPointer, input, target, maxTargetOctetSize);
 }
+
+/// Checks if a state has been set to the virtual machine
+/// @param self
+/// @return
+bool transmuteVmHasState(const TransmuteVm* self)
+{
+    return self->initialStateIsSet;
+}
