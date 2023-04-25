@@ -15,6 +15,7 @@ typedef struct TransmuteState {
 } TransmuteState;
 
 typedef struct TransmuteParticipantInput {
+    uint8_t participantId;
     const void* input;
     size_t octetSize;
 } TransmuteParticipantInput;
