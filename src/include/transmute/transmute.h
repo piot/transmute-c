@@ -33,6 +33,15 @@ typedef int (*TransmuteStateToStringFn)(void* vmPointer, const TransmuteState* s
 typedef int (*TransmuteInputToStringFn)(void* vmPointer, const TransmuteParticipantInput* input, char* target,
                                         size_t maxSize);
 
+
+typedef struct TransmuteVmVersion {
+    uint16_t major;
+    uint16_t minor;
+    uint16_t patch;
+} TransmuteVmVersion;
+
+bool transmuteVmVersionIsEqual(const TransmuteVmVersion* a, const TransmuteVmVersion* b);
+
 typedef struct TransmuteVm {
     TransmuteTickFn tickFn;
     TransmuteGetStateFn getStateFn;
@@ -43,7 +52,9 @@ typedef struct TransmuteVm {
     void* vmPointer;
     Clog log;
     bool initialStateIsSet;
+    TransmuteVmVersion version;
 } TransmuteVm;
+
 
 typedef struct TransmuteVmSetup {
     TransmuteTickFn tickFn;
@@ -52,7 +63,7 @@ typedef struct TransmuteVmSetup {
     TransmuteStateToStringFn stateToString;
     TransmuteInputToStringFn inputToString;
     size_t tickDurationMs;
-
+    TransmuteVmVersion version;
 } TransmuteVmSetup;
 
 void transmuteVmInit(TransmuteVm* self, void* vmPointer, TransmuteVmSetup setup, Clog log);

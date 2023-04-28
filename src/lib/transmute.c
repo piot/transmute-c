@@ -19,6 +19,7 @@ void transmuteVmInit(TransmuteVm* self, void* vmPointer, TransmuteVmSetup setup,
     self->constantTickDurationMs = setup.tickDurationMs;
     self->vmPointer = vmPointer;
     self->log = log;
+    self->version = setup.version;
     self->initialStateIsSet = false;
 }
 
@@ -92,4 +93,13 @@ int transmuteVmInputToString(const TransmuteVm* self, const TransmuteParticipant
 bool transmuteVmHasState(const TransmuteVm* self)
 {
     return self->initialStateIsSet;
+}
+
+/// Checks that versions are equal
+/// @param a
+/// @param b
+/// @return
+bool transmuteVmVersionIsEqual(const TransmuteVmVersion* a, const TransmuteVmVersion* b)
+{
+    return a->major == b->major && a->minor == b->minor && a->patch == b->patch;
 }
