@@ -42,7 +42,7 @@ void transmuteVmTick(TransmuteVm* self, const TransmuteInput* input)
     if (!self->initialStateIsSet) {
         CLOG_ERROR("can not tick, since initial state has not been set")
     }
-#if CONFIGURATION_DEBUG
+#if TRANSMUTE_LOG_TICK
     CLOG_C_VERBOSE(&self->log, "tick with inputs:")
     char inputDebugString[64];
     for (size_t i=0; i<input->participantCount; ++i) {
