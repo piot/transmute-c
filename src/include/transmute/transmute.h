@@ -25,6 +25,8 @@ typedef struct TransmuteInput {
     size_t participantCount;
 } TransmuteInput;
 
+int transmuteInputFindParticipantId(const TransmuteInput* input, uint8_t participantId);
+
 typedef void (*TransmuteTickFn)(void* vmPointer, const TransmuteInput* input);
 typedef TransmuteState (*TransmuteGetStateFn)(const void* vmPointer);
 typedef void (*TransmuteSetStateFn)(void* vmPointer, const TransmuteState* state);

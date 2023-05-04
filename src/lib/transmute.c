@@ -103,3 +103,15 @@ bool transmuteVmVersionIsEqual(const TransmuteVmVersion* a, const TransmuteVmVer
 {
     return a->major == b->major && a->minor == b->minor && a->patch == b->patch;
 }
+
+
+int transmuteInputFindParticipantId(const TransmuteInput* input, uint8_t participantId)
+{
+    for (size_t i=0; i< input->participantCount; ++i) {
+        if (input->participantInputs[i].participantId == participantId) {
+            return i;
+        }
+    }
+
+    return -1;
+}
