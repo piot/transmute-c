@@ -7,6 +7,7 @@
 #include <clog/console.h>
 
 clog_config g_clog;
+char g_clog_temp_str[CLOG_TEMP_STR_SIZE];
 
 UTEST_STATE();
 

@@ -12,3 +12,4 @@ Makefile
 *.cmake
 CMakeCache.txt
 *.a
+src/test/transmute_test
