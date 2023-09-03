@@ -14,8 +14,15 @@ typedef struct TransmuteState {
     size_t octetSize;
 } TransmuteState;
 
+typedef enum TransmuteParticipantInputType {
+    TransmuteParticipantInputTypeNormal,
+    TransmuteParticipantInputTypeNoInputInTime,
+    TransmuteParticipantInputTypeWaitingForReconnect
+} TransmuteParticipantInputType;
+
 typedef struct TransmuteParticipantInput {
     uint8_t participantId;
+    TransmuteParticipantInputType inputType;
     const void* input;
     size_t octetSize;
 } TransmuteParticipantInput;
