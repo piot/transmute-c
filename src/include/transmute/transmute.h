@@ -17,11 +17,14 @@ typedef struct TransmuteState {
 typedef enum TransmuteParticipantInputType {
     TransmuteParticipantInputTypeNormal,
     TransmuteParticipantInputTypeNoInputInTime,
-    TransmuteParticipantInputTypeWaitingForReconnect
+    TransmuteParticipantInputTypeWaitingForReJoin,
+    TransmuteParticipantInputTypeJoined,
+    TransmuteParticipantInputTypeLeft,
 } TransmuteParticipantInputType;
 
 typedef struct TransmuteParticipantInput {
     uint8_t participantId;
+    uint8_t localPartyId; // Only valid when TransmuteParticipantInputTypeJoined
     TransmuteParticipantInputType inputType;
     const void* input;
     size_t octetSize;
